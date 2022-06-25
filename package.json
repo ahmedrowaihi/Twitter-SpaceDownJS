@@ -1,11 +1,14 @@
 {
-  "name": "twitter-space-downJS",
+  "name": "Twitter-SpaceDownJS",
   "version": "1.0.0",
   "main": "index.js",
   "author": {
     "name": "Ahmed Rowaihi",
     "email": "developer@ahmedrowaihi.lol",
-    "url": "https://github.com/ahmedrowaihi/twitter-space-downJS"
+    "url": "https://github.com/ahmedrowaihi/Twitter-SpaceDownJS"
+  },
+  "scripts": {
+    "start": "node index.js"
   },
   "description": "A NODE Based CLI for Downloading Twitter Spaces with CLI.",
   "type": "module",
@@ -14,6 +17,7 @@
     "axios": "^0.27.2",
     "chalk": "^5.0.1",
     "dotenv": "^16.0.1",
+    "fluent-ffmpeg": "^2.1.2",
     "inquirer": "^9.0.0",
     "nanospinner": "^1.1.0"
   }

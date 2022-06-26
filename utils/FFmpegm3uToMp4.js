@@ -5,7 +5,6 @@
  */
 
 import ffmpeg from "fluent-ffmpeg";
-import { logProgress } from "./Loggers/index.js";
 import { createSpinner } from "nanospinner";
 
 /**

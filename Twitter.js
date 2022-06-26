@@ -47,9 +47,12 @@ class Twitter {
     // fetch media key
     const MediakeySpinner = createSpinner("Fetching Media Key...");
     MediakeySpinner.start();
-    const { media_key = "", title = "" } = await this.#AxiosT
+    const { media_key, title } = (await this.#AxiosT
       .get(URLs.SpaceGraphQLQueryURL.replace("spaceID", spaceID))
-      .then((res) => res.data.data.audioSpace.metadata);
+      .then((res) => res?.data?.data?.audioSpace?.metadata)) ?? {
+      media_key: "",
+      title: "",
+    };
 
     if (!media_key)
       return MediakeySpinner.stop({ text: "Failed to get Space Media Key" });

@@ -14,11 +14,6 @@ class Twitter {
     this.#config = HeadersConfig;
     this.#AxiosT = axios.create(this.#config);
   }
-  start() {
-    // 1RDGlgrMdPoKL
-
-    this.#GetGuestToken();
-  }
   #GetGuestToken = async () => {
     // Generate Guest Token
     const spinner = createSpinner("Generating A Guest...").start();
@@ -34,14 +29,14 @@ class Twitter {
     this.#config.headers["X-Guest-Token"] = guest_token;
     this.#AxiosT = axios.create(this.#config); // update axios headers
     spinner.success({ text: "Guest token was craeted successfully!" });
-    return this.#getID();
+    return;
   };
   #getID = async () => {
     // Get SpaceID user Input
     const SpaceID = await GetSpaceIDPropmpt();
     if (!SpaceID) return logFail("Invalid Space ID");
     logProgress("Valid Space ID: " + SpaceID);
-    return this.#getSpaceMetas(SpaceID);
+    return SpaceID;
   };
   #getSpaceMetas = async (spaceID) => {
     // fetch media key
@@ -60,7 +55,7 @@ class Twitter {
       text: "Success Fetch of Media Key: " + media_key,
     });
     this.Title = title;
-    return this.#fetchStream(media_key);
+    return media_key;
   };
   #fetchStream = async (media_key) => {
     const spaceSRCSpinner = createSpinner("Fetching Space details...").start();
@@ -73,17 +68,24 @@ class Twitter {
     if (!spaceSRC)
       spaceSRCSpinner.stop({ text: "Fetching Space details Fialed" });
     spaceSRCSpinner.success({ text: "Successful Space details fetched" });
-    return this.#StartFFmpeg(spaceSRC);
+    return spaceSRC;
   };
-  #StartFFmpeg = async (spaceMu) => {
+  #StartFFmpeg = async (spaceSRC) => {
     const SpaceFFmpeg = new FFmpegm3uToMp4({
-      InputFile: spaceMu,
+      InputFile: spaceSRC,
       OutputFile: this.Title + " TwitterSpace.mp4",
       Headers: this.#config.headers,
     });
     await SpaceFFmpeg.start();
     process.exit(0);
   };
+  async start() {
+    await this.#GetGuestToken();
+    const spaceID = await this.#getID();
+    const mediaKey = await this.#getSpaceMetas(spaceID);
+    const spaceSRC = await this.#fetchStream(mediaKey);
+    this.#StartFFmpeg(spaceSRC);
+  }
 }
 
 export default Twitter;
